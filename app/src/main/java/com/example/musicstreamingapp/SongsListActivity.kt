@@ -30,7 +30,7 @@ class SongsListActivity : AppCompatActivity() {
         binding.apply {
             binding.nameText.text = category.name
 
-            Glide.with(binding.coverImageView).load(category.url)
+            Glide.with(binding.coverImageView).load(category.coverUrl)
                 .apply(RequestOptions().transform(RoundedCorners(32)))
                 .into(binding.coverImageView)
 

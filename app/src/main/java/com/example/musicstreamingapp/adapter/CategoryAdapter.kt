@@ -22,7 +22,7 @@ class CategoryAdapter(private val categoryList: List<CategoriesModel>):
         fun bindData(category: CategoriesModel) {
             binding.nameText.text = category.name
 
-            Glide.with(binding.imageView).load(category.url)
+            Glide.with(binding.imageView).load(category.coverUrl)
                 .apply(RequestOptions().transform(RoundedCorners(32)))
                 .into(binding.imageView)
 
