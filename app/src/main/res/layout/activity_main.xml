@@ -30,6 +30,7 @@
             />
 
         <ImageView
+            android:id="@+id/optionButton"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/baseline_menu_24"
@@ -73,49 +74,8 @@
                 android:layout_height="35dp"
                 />
 
-           <RelativeLayout
-               android:id="@+id/section_1_layout"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:visibility="gone"
-
-               >
-
-               <TextView
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   tools:text="Trending"
-                   android:id="@+id/title_section_1"
-                   android:textColor="@color/white"
-                   android:textSize="24sp"
-
-                   />
-
-               <ImageView
-                   android:layout_width="35dp"
-                   android:layout_height="35dp"
-                   android:src="@drawable/baseline_arrow"
-                   app:tint="@color/white"
-                   android:layout_alignParentEnd="true"
-                   />
-
-               <androidx.recyclerview.widget.RecyclerView
-                   android:id="@+id/recycler_view_section_1"
-                   android:layout_width="match_parent"
-                   android:layout_height="wrap_content"
-                   android:layout_below="@id/title_section_1"
-                   />
-
-
-           </RelativeLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="35dp"
-                />
-
             <RelativeLayout
-                android:id="@+id/section_2_layout"
+                android:id="@+id/most_played_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
@@ -125,8 +85,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    tools:text="Trending"
-                    android:id="@+id/title_section_2"
+                    tools:text="Most Played Songs"
+                    android:id="@+id/title_most_played"
                     android:textColor="@color/white"
                     android:textSize="24sp"
 
@@ -141,14 +101,56 @@
                     />
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_view_section_2"
+                    android:id="@+id/recycler_view_most_played"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/title_section_2"
+                    android:layout_below="@id/title_most_played"
+                    />
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
                     />
 
 
             </RelativeLayout>
+
+           <RelativeLayout
+               android:id="@+id/section_2_layout"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:visibility="gone"
+
+               >
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   tools:text="Trending"
+                   android:id="@+id/title_section_2"
+                   android:textColor="@color/white"
+                   android:textSize="24sp"
+
+                   />
+
+               <ImageView
+                   android:layout_width="35dp"
+                   android:layout_height="35dp"
+                   android:src="@drawable/baseline_arrow"
+                   app:tint="@color/white"
+                   android:layout_alignParentEnd="true"
+                   />
+
+               <androidx.recyclerview.widget.RecyclerView
+                   android:id="@+id/recycler_view_section_2"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_below="@id/title_section_2"
+                   />
+
+
+           </RelativeLayout>
 
             <View
                 android:layout_width="match_parent"
@@ -268,6 +270,47 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/title_section_5"
+                    />
+
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                />
+
+            <RelativeLayout
+                android:id="@+id/section_6_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="Trending"
+                    android:id="@+id/title_section_6"
+                    android:textColor="@color/white"
+                    android:textSize="24sp"
+
+                    />
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:src="@drawable/baseline_arrow"
+                    app:tint="@color/white"
+                    android:layout_alignParentEnd="true"
+                    />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_view_section_6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/title_section_6"
                     />
 
 

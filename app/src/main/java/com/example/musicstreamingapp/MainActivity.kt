@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.PopupMenu
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,7 +17,10 @@ import com.example.musicstreamingapp.adapter.CategoryAdapter
 import com.example.musicstreamingapp.adapter.SectionSongAdapter
 import com.example.musicstreamingapp.databinding.ActivityMainBinding
 import com.example.musicstreamingapp.models.CategoriesModel
+import com.example.musicstreamingapp.models.SongModel
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.toObject
 import com.google.firebase.firestore.toObjects
 import com.google.firebase.ktx.Firebase
@@ -25,32 +29,62 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
-    lateinit var categoryAdapter: CategoryAdapter
+    private lateinit var categoryAdapter: CategoryAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.optionButton.setOnClickListener {
+            showPopUpMenu()
+        }
+
         getCategories()
-        setSection("section_1", binding.section1Layout, binding.titleSection1, binding.recyclerViewSection1)
+        setMostPlayedSection("mostly_played", binding.mostPlayedLayout, binding.titleMostPlayed, binding.recyclerViewMostPlayed)
         setSection("section_2", binding.section2Layout, binding.titleSection2, binding.recyclerViewSection2)
         setSection("section_3", binding.section3Layout, binding.titleSection3, binding.recyclerViewSection3)
         setSection("section_4", binding.section4Layout, binding.titleSection4, binding.recyclerViewSection4)
         setSection("section_5", binding.section5Layout, binding.titleSection5, binding.recyclerViewSection5)
+        setSection("section_6", binding.section6Layout, binding.titleSection6, binding.recyclerViewSection6)
 
+    }
+
+    private fun showPopUpMenu() {
+        val popupMenu = PopupMenu(this,binding.optionButton)
+        val inflater = popupMenu.menuInflater
+        inflater.inflate(R.menu.option_menu, popupMenu.menu)
+        popupMenu.show()
+
+        popupMenu.setOnMenuItemClickListener {
+            when(it.itemId) {
+                R.id.logout -> {
+                    logout()
+                    true
+                }
+            }
+            false
+        }
+    }
+
+    private fun logout() {
+        ExoPlayer_singleton.getInstance()?.release()
+
+        FirebaseAuth.getInstance().signOut()
+        startActivity(Intent(this, LoginActivity::class.java))
+        finish()
     }
 
     // for categories
 
-    fun getCategories() {
+    private fun getCategories() {
         FirebaseFirestore.getInstance().collection("Category_Songs").get().addOnSuccessListener {
             val categoryList = it.toObjects(CategoriesModel::class.java)
             setupRecyclerView(categoryList)
         }
     }
 
-    fun setupRecyclerView(categoryList: List<CategoriesModel>) {
+    private fun setupRecyclerView(categoryList: List<CategoriesModel>) {
         categoryAdapter = CategoryAdapter(categoryList)
         binding.recyclerViewCategories.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         binding.recyclerViewCategories.adapter = categoryAdapter
@@ -58,7 +92,7 @@ class MainActivity : AppCompatActivity() {
 
     // for sections
 
-    fun setSection(id: String, section_layout: RelativeLayout, section_title: TextView, section_recycler_view: RecyclerView) {
+    private fun setSection(id: String, section_layout: RelativeLayout, section_title: TextView, section_recycler_view: RecyclerView) {
         FirebaseFirestore.getInstance().collection("sections")
             .document(id).get().addOnSuccessListener {
 
@@ -76,6 +110,40 @@ class MainActivity : AppCompatActivity() {
                         startActivity(Intent(this@MainActivity, SongsListActivity::class.java))
                     }
                 }
+            }
+    }
+
+    fun setMostPlayedSection(id: String, section_layout: RelativeLayout, section_title: TextView, section_recycler_view: RecyclerView) {
+        FirebaseFirestore.getInstance().collection("sections")
+            .document(id).get().addOnSuccessListener {
+
+                // addmost played songss
+
+                FirebaseFirestore.getInstance().collection("songs")
+                    .orderBy("count", Query.Direction.DESCENDING)
+                    .limit(8).get()
+                    .addOnSuccessListener { songList ->
+                        val songsModelList = songList.toObjects<SongModel>()
+                        val songsIdList = songsModelList.map {
+                            it.id
+                        }.toList()
+                        val section = it.toObject(CategoriesModel::class.java)
+                        section?.apply {
+                            section.songs = songsIdList
+
+                            section_layout.visibility = View.VISIBLE
+
+                            section_title.text = name
+                            section_recycler_view.layoutManager = LinearLayoutManager(this@MainActivity, LinearLayoutManager.HORIZONTAL, false)
+                            section_recycler_view.adapter = SectionSongAdapter(songs)
+
+                            section_layout.setOnClickListener {
+
+                                SongsListActivity.category = section
+                                startActivity(Intent(this@MainActivity, SongsListActivity::class.java))
+                            }
+                        }
+                    }
             }
     }
 
